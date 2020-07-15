@@ -20,7 +20,7 @@ function GetToken(){
     if (contents != null && contents != "undefined")
     {
         var jsonContent = JSON.parse(contents);
-        if (jsonContent.hasOwnProperty('token') && jsonContent.token != "undefined")
+        if (jsonContent.hasOwnProperty('token'))
         {
             console.log('token : '+jsonContent.token);
             return jsonContent.token;
