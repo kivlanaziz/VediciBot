@@ -14,6 +14,16 @@ client.on('message', (msg) => {
     }
 });
 
+client.on('guildMemberAdd', member => {
+    const channel = member.guild.channels.cache.find(ch => ch.name === 'public');
+    
+    if (!channel) return;
+    channel.send(`Welcome to the server, ${member}`);
+
+    var role = member.guild.roles.cache.find((role => role.name === "Member"));
+    member.roles.add(role);
+  });
+
 function GetToken(){
     var fs = require("fs");
     var contents = fs.readFileSync("credential.json");
