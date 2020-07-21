@@ -32,7 +32,7 @@ client.on('message', (msg) => {
             break;
 
         case 'stop':
-            stop(msg.serverQueue);
+            stop(msg, serverQueue);
             break;
 
         case 'queue':
@@ -115,7 +115,9 @@ function play(guild, song) {
         return;
     }
     const dispatcher = serverQueue.connection
-        .play(ytdl(song.url))
+        .play(ytdl(song.url),{
+            highWaterMark: 50
+        })
         .on("finish", () => {
             serverQueue.songs.shift();
             play(guild, serverQueue.songs[0]);
