@@ -126,3 +126,10 @@ function showQueue(message, serverQueue) {
     console.log(embedList);
     return message.channel.send({ embed: embedList });
 }
+
+module.exports={
+    execute: execute,
+    skip: skip,
+    stop: stop,
+    showQueue: showQueue
+};
