@@ -54,7 +54,10 @@ client.on('guildMemberAdd', member => {
 
 async function execute(message, serverQueue) {
     const args = message.content.split(" ");
-
+    if (typeof args[1] === 'undefined')
+        return message.channel.send(
+            "You need to provide the url of the song"
+        );
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel)
         return message.channel.send(
