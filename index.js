@@ -26,7 +26,7 @@ client.on('message', (msg) => {
 
     switch (args[0]) {
         case 'start':
-            youtube.execute(msg, serverQueue);
+            youtube.execute(msg, serverQueue, queue);
             break;
 
         case 'skip':

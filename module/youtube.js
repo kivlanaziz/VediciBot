@@ -3,7 +3,7 @@ const ytdl = require("ytdl-core-discord");
 const { connect } = require('http2');
 // ------------------ //
 
-async function execute(message, serverQueue) {
+async function execute(message, serverQueue, queue) {
     const args = message.content.split(" ");
     if (typeof args[1] === 'undefined')
         return message.channel.send(
@@ -47,7 +47,7 @@ async function execute(message, serverQueue) {
             var connection = await voiceChannel.join();
             queueContruct.connection = connection;
             // Calling the play function to start a song
-            play(message.guild, queueContruct.songs[0]);
+            play(message.guild, queueContruct.songs[0], queue);
         } catch (err) {
             // Printing the error message if the bot fails to join the voicechat
             console.log(err);
@@ -61,7 +61,7 @@ async function execute(message, serverQueue) {
     }
 }
 
-async function play(guild, song) {
+async function play(guild, song, queue) {
     const serverQueue = queue.get(guild.id);
     if (!song) {
         serverQueue.voiceChannel.leave();
