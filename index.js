@@ -116,7 +116,6 @@ function play(guild, song) {
     }
     const dispatcher = serverQueue.connection
         .play(ytdl(song.url, {
-            type: 'opus',
             highWaterMark: 1024 * 1024 * 15
         }),{
             highWaterMark: 24
