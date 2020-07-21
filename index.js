@@ -1,7 +1,6 @@
 
 // --- Dependency --- //
 const Discord = require('discord.js');
-const ytdl = require("ytdl-core-discord");
 const { connect } = require('http2');
 const youtube = require("./module/youtube.js");
 // ------------------ //

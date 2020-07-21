@@ -1,3 +1,8 @@
+// --- Dependency --- //
+const ytdl = require("ytdl-core-discord");
+const { connect } = require('http2');
+// ------------------ //
+
 async function execute(message, serverQueue) {
     const args = message.content.split(" ");
     if (typeof args[1] === 'undefined')
