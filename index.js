@@ -18,7 +18,9 @@ client.on('message', (msg) => {
     if (msg.content.includes('hi vedici')) {
         msg.reply('Hi! :)');
     }
-
+    if (msg.content[0] != PREFIX){
+        return;
+    }
     let args = msg.content.substring(PREFIX.length).split(" ");
     const serverQueue = queue.get(msg.guild.id);
 
