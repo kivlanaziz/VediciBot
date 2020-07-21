@@ -1,7 +1,7 @@
 
 // --- Dependency --- //
 const Discord = require('discord.js');
-const ytdl = require("ytdl-core");
+const ytdl = require("ytdl-core-discord");
 const { connect } = require('http2');
 // ------------------ //
 
@@ -115,10 +115,11 @@ function play(guild, song) {
         return;
     }
     const dispatcher = serverQueue.connection
-        .play(ytdl(song.url, {
+        .play(await ytdl(song.url, {
+            type: 'opus',
             highWaterMark: 1024 * 1024 * 15
         }),{
-            highWaterMark: 24
+            highWaterMark: 50
         })
         .on("finish", () => {
             serverQueue.songs.shift();
