@@ -62,13 +62,21 @@ function help (message){
     var helpMessage = [];
     //Play message
     helpMessage.push({
-        name: PREFIX + "play -youtubeURL",
+        name: PREFIX + "play *-youtubeURL*",
         value: "Play an audio from youtube URL"
+    })
+    helpMessage.push({
+        name: PREFIX + "play *-songName*",
+        value: "Play an audio based on the song name"
     })
     //Skip message
     helpMessage.push({
         name: PREFIX + "skip",
         value: "Skip the current audio"
+    })
+    helpMessage.push({
+        name: PREFIX + "skip *-songIndex*",
+        value: "Remove the selected audio from the queue"
     })
     //Stop message
     helpMessage.push({
