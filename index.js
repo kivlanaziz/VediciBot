@@ -10,8 +10,6 @@ const PREFIX = '-';
 
 const queue = new Map();
 
-client.user.setActivity('-help');
-
 client.on('ready', () => {
     console.log('VediciBot Reporting!');
 });
@@ -97,4 +95,4 @@ function help (message){
     return message.channel.send({ embed: embedList });
 }
 
-client.login(process.env.token);
+client.login(process.env.token).then(client.user.setActivity('-help'));
