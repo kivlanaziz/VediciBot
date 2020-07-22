@@ -105,15 +105,25 @@ function stop(message, serverQueue) {
 
 function showQueue(message, serverQueue) {
     var list = [];
+    var index = 0;
     if (!serverQueue)
         return message.channel.send("Queue is Empty!");
 
     serverQueue.songs.forEach(song => {
         console.log(song.title);
-        list.push({
-            name: song.title,
-            value: song.url
-        });
+        index++;
+        if (index == 1){
+            list.push({
+                name: "[" + index +"] " + song.title + " (Playing)",
+                value: song.url
+            });
+        }
+        else{
+            list.push({
+                name: "[" + index +"] " + song.title,
+                value: song.url
+            });
+        }
     });
 
     const embedList = {
