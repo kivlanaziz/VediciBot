@@ -12,6 +12,7 @@ const queue = new Map();
 
 client.on('ready', () => {
     console.log('VediciBot Reporting!');
+    client.user.setActivity('-help')
 });
 
 client.on('message', (msg) => {
@@ -95,4 +96,4 @@ function help (message){
     return message.channel.send({ embed: embedList });
 }
 
-client.login(process.env.token).then(client.user.setActivity('-help'));
+client.login(process.env.token);
