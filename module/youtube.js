@@ -85,13 +85,26 @@ async function play(guild, song, queue) {
 }
 
 function skip(message, serverQueue) {
+    const args = message.content.split(" ");
+    console.log(args[1]);
     if (!message.member.voice.channel)
         return message.channel.send(
             "You have to be in a voice channel to stop the music!"
         );
     if (!serverQueue)
         return message.channel.send("There is no song that I could skip!");
-    serverQueue.connection.dispatcher.end();
+    
+    if (typeof args[1] === 'undefined'){
+        serverQueue.connection.dispatcher.end();
+    }
+    else{
+        if (serverQueue.songs[args[1] - 1] !== 'undefined'){
+            serverQueue.songs.splice(args[1] - 1,1);
+        }
+        else{
+            return message.channel.send("There is no queued song at index " + args[1]);
+        }
+    }
 }
 
 function stop(message, serverQueue) {
