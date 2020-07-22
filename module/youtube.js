@@ -45,14 +45,13 @@ async function execute(message, serverQueue, queue) {
             }
             else{
                 var youtubeUrl = 'https://www.youtube.com/watch?v='+videoId;
-                console.log(youtubeUrl);
-                songInfo = await ytdl.getInfo(youtubeUrl);
             }
         }
         catch(err){
             console.log(err);
         }
     }
+    console.log(youtubeUrl);
     songInfo = await ytdl.getInfo(youtubeUrl);
     const song = {
         title: songInfo.title,
