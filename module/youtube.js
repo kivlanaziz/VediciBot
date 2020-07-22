@@ -77,7 +77,7 @@ async function play(guild, song, queue) {
         })
         .on("finish", () => {
             serverQueue.songs.shift();
-            play(guild, serverQueue.songs[0]);
+            play(guild, serverQueue.songs[0], queue);
         })
         .on("error", error => console.error(error));
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
