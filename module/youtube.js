@@ -1,6 +1,9 @@
 // --- Dependency --- //
 const ytdl = require("ytdl-core-discord");
+const validUrl = require("valid-url");
 const { connect } = require('http2');
+const { google } = require('googleapis');
+const { youtube } = require("googleapis/build/src/apis/youtube");
 // ------------------ //
 
 async function execute(message, serverQueue, queue) {
@@ -21,7 +24,37 @@ async function execute(message, serverQueue, queue) {
         );
     }
 
-    const songInfo = await ytdl.getInfo(args[1]);
+    if (validUrl.isUri(args[1])){
+        var youtubeUrl = args[1];
+    }
+    else{
+        var i;
+        var queryString = "";
+        for (i = 1; i < args.length; i++ ){
+            queryString += args[i] + " ";
+        }
+        try{
+            var searchResult = await getYoutubeSearch(queryString);
+            
+            var videoId = searchResult.data.items[0].id.videoId;
+            
+            if (typeof videoId === 'undefined'){
+                return message.channel.send(
+                    "Cannot find the video"
+                );
+            }
+            else{
+                var youtubeUrl = 'https://www.youtube.com/watch?v='+videoId;
+                console.log(youtubeUrl);
+                songInfo = await ytdl.getInfo(youtubeUrl);
+            }
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+    songInfo = await ytdl.getInfo(youtubeUrl);
+    console.log(songInfo);
     const song = {
         title: songInfo.title,
         url: songInfo.video_url,
@@ -153,6 +186,15 @@ function showQueue(message, serverQueue) {
     };
     console.log(embedList);
     return message.channel.send({ embed: embedList });
+}
+
+async function getYoutubeSearch(queryString){
+    console.log('querying: ' + queryString);
+    return google.youtube('v3').search.list({
+        key: process.env.YOUTUBE_TOKEN,
+        part: 'snippet',
+        q: queryString
+    });
 }
 
 module.exports={

@@ -19,8 +19,11 @@
   "homepage": "https://github.com/kivlanaziz/VediciBot#readme",
   "dependencies": {
     "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.2.5",
+    "googleapis": "^55.0.0",
     "opusscript": "0.0.7",
+    "valid-url": "^1.0.9",
     "ytdl-core": "^3.1.2",
     "ytdl-core-discord": "^1.2.1"
   }
