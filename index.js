@@ -25,7 +25,10 @@ client.on('message', (msg) => {
     const serverQueue = queue.get(msg.guild.id);
 
     switch (args[0]) {
-        case 'start':
+        case 'help' :
+            help(msg);
+            break;
+        case 'play':
             youtube.execute(msg, serverQueue, queue);
             break;
 
@@ -53,5 +56,43 @@ client.on('guildMemberAdd', member => {
     var role = member.guild.roles.cache.find((role => role.name === "Member"));
     member.roles.add(role);
 });
+
+function help (message){
+    var helpMessage = [];
+    //Play message
+    helpMessage.push({
+        name: PREFIX + "play -youtubeURL",
+        value: "Play an audio from youtube URL"
+    })
+    //Skip message
+    helpMessage.push({
+        name: PREFIX + "skip",
+        value: "Skip the current audio"
+    })
+    //Stop message
+    helpMessage.push({
+        name: PREFIX + "stop",
+        value: "Stop the current audio & clear the queue"
+    })
+    //ShowQueue message
+    helpMessage.push({
+        name: PREFIX + "queue",
+        value: "Show the audio queue"
+    })
+    const embedList = {
+        color: 0x04d9c4,
+        title: 'Vedici Help Center',
+        author: {
+            name: "Hi " + message.member.user.username
+        },
+        fields: helpMessage,
+        timestamp: new Date(),
+        footer: {
+            text: 'Vedici Bot',
+        },
+    };
+    console.log(embedList);
+    return message.channel.send({ embed: embedList });
+}
 
 client.login(process.env.token);
