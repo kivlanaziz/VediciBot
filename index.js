@@ -10,6 +10,8 @@ const PREFIX = '-';
 
 const queue = new Map();
 
+client.user.setActivity('-help');
+
 client.on('ready', () => {
     console.log('VediciBot Reporting!');
 });
