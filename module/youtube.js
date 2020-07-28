@@ -26,6 +26,11 @@ async function execute(message, serverQueue, queue) {
 
     if (validUrl.isUri(args[1])){
         var youtubeUrl = args[1];
+        songInfo = await ytdl.getInfo(youtubeUrl);
+        const song = {
+            title: songInfo.title,
+            url: songInfo.video_url,
+        };
     }
     else{
         var i;
@@ -37,7 +42,7 @@ async function execute(message, serverQueue, queue) {
             var searchResult = await getYoutubeSearch(queryString);
             
             var videoId = searchResult.data.items[0].id.videoId;
-            
+            var title = searchResult.data.items[0].snippet.title;
             if (typeof videoId === 'undefined'){
                 return message.channel.send(
                     "Cannot find the video"
@@ -45,18 +50,17 @@ async function execute(message, serverQueue, queue) {
             }
             else{
                 var youtubeUrl = 'https://www.youtube.com/watch?v='+videoId;
+                const song = {
+                    title: title,
+                    url: youtubeUrl,
+                };
             }
         }
         catch(err){
             console.log(err);
         }
     }
-    console.log(youtubeUrl);
-    songInfo = await ytdl.getInfo(youtubeUrl);
-    const song = {
-        title: songInfo.title,
-        url: songInfo.video_url,
-    };
+    
 
     if (!serverQueue) {
         // Creating the contract for our queue
