@@ -23,11 +23,11 @@ async function execute(message, serverQueue, queue) {
             "I need the permissions to join and speak in your voice channel!"
         );
     }
-
+    var song;
     if (validUrl.isUri(args[1])){
         var youtubeUrl = args[1];
         songInfo = await ytdl.getInfo(youtubeUrl);
-        const song = {
+        song = {
             title: songInfo.title,
             url: songInfo.video_url,
         };
@@ -50,7 +50,7 @@ async function execute(message, serverQueue, queue) {
             }
             else{
                 var youtubeUrl = 'https://www.youtube.com/watch?v='+videoId;
-                const song = {
+                song = {
                     title: title,
                     url: youtubeUrl,
                 };
