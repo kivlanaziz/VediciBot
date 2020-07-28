@@ -3,6 +3,7 @@
 const Discord = require('discord.js');
 const { connect } = require('http2');
 const youtube = require("./module/youtube.js");
+const message = require("./module/message.js");
 // ------------------ //
 
 const client = new Discord.Client();
@@ -27,8 +28,9 @@ client.on('message', (msg) => {
 
     switch (args[0]) {
         case 'help' :
-            help(msg);
+            message.help(msg);
             break;
+            
         case 'play':
             youtube.execute(msg, serverQueue, queue);
             break;
@@ -57,51 +59,5 @@ client.on('guildMemberAdd', member => {
     var role = member.guild.roles.cache.find((role => role.name === "Member"));
     member.roles.add(role);
 });
-
-function help (message){
-    var helpMessage = [];
-    //Play message
-    helpMessage.push({
-        name: PREFIX + "play *-youtubeURL*",
-        value: "Play an audio from youtube URL"
-    })
-    helpMessage.push({
-        name: PREFIX + "play *-songName*",
-        value: "Play an audio based on the song name"
-    })
-    //Skip message
-    helpMessage.push({
-        name: PREFIX + "skip",
-        value: "Skip the current audio"
-    })
-    helpMessage.push({
-        name: PREFIX + "skip *-songIndex*",
-        value: "Remove the selected audio from the queue"
-    })
-    //Stop message
-    helpMessage.push({
-        name: PREFIX + "stop",
-        value: "Stop the current audio & clear the queue"
-    })
-    //ShowQueue message
-    helpMessage.push({
-        name: PREFIX + "queue",
-        value: "Show the audio queue"
-    })
-    const embedList = {
-        color: 0x04d9c4,
-        title: 'Vedici Help Center',
-        author: {
-            name: "Hi " + message.member.user.username
-        },
-        fields: helpMessage,
-        timestamp: new Date(),
-        footer: {
-            text: 'Vedici Bot',
-        },
-    };
-    console.log(embedList);
-    return message.channel.send({ embed: embedList });
-}
 
 client.login(process.env.token);
