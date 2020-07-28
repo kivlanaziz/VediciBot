@@ -28,7 +28,7 @@ client.on('message', (msg) => {
 
     switch (args[0]) {
         case 'help' :
-            message.help(msg);
+            message.help(msg, PREFIX);
             break;
             
         case 'play':

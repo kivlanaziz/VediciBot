@@ -1,4 +1,4 @@
-function help (message){
+function help (message, PREFIX){
     var helpMessage = [];
     //Play message
     helpMessage.push({
