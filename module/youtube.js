@@ -45,7 +45,6 @@ async function execute(message, serverQueue, queue) {
                 }
                 songs.push(song);
             });
-            console.log(songs);
         }
         else{
             var youtubeUrl = args[1];
@@ -100,7 +99,7 @@ async function execute(message, serverQueue, queue) {
         // Pushing the song to our songs array
         if (isPlaylist){
             queueContruct.songs.push(...songs);
-            return message.channel.send(`Playlist has been added to the queue!`);
+            message.channel.send(`Playlist has been added to the queue!`);
         }
         else{
             queueContruct.songs.push(song);
