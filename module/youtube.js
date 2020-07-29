@@ -31,7 +31,9 @@ async function execute(message, serverQueue, queue) {
     if (validUrl.isUri(args[1])){
         if (args[1].includes('/playlist?')){
             isPlaylist = true;
-            var searchResult = await getYoutubePlaylist(args[1]);
+            var urlSearchParam = new URLSearchParams(args[1]);
+            var playlistId = urlSearchParam.get('list');
+            var searchResult = await getYoutubePlaylist(playlistId);
 
             searchResult.data.items.forEach(item => {
                 song = {
