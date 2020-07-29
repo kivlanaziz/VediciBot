@@ -45,6 +45,7 @@ async function execute(message, serverQueue, queue) {
                 }
                 songs.push(song);
             });
+            console.log(songs);
         }
         else{
             var youtubeUrl = args[1];
@@ -98,7 +99,7 @@ async function execute(message, serverQueue, queue) {
         queue.set(message.guild.id, queueContruct);
         // Pushing the song to our songs array
         if (isPlaylist){
-            queueContruct.songs.push(songs);
+            queueContruct.songs.push(...songs);
             return message.channel.send(`Playlist has been added to the queue!`);
         }
         else{
@@ -119,7 +120,7 @@ async function execute(message, serverQueue, queue) {
         }
     } else {
         if (isPlaylist){
-            serverQueue.songs.push(songs);
+            serverQueue.songs.push(...songs);
             console.log(serverQueue.songs);
             return message.channel.send(`Playlist has been added to the queue!`);
         }
