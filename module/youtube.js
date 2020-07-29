@@ -36,8 +36,9 @@ async function execute(message, serverQueue, queue) {
             console.log('urlSearchParam: '+'?'+url[1]);
             var playlistId = urlSearchParam.get('list');
             var searchResult = await getYoutubePlaylist(playlistId);
-
+            console.log(searchResult);
             searchResult.data.items.forEach(item => {
+                console.log('song url: https://www.youtube.com/watch?v=' + item.snippet.resourceId.videoId);
                 song = {
                     title: item.snippet.title,
                     url: 'https://www.youtube.com/watch?v=' + item.snippet.resourceId.videoId
@@ -98,6 +99,7 @@ async function execute(message, serverQueue, queue) {
         // Pushing the song to our songs array
         if (isPlaylist){
             queueContruct.songs.push(songs);
+            return message.channel.send(`Playlist has been added to the queue!`);
         }
         else{
             queueContruct.songs.push(song);
