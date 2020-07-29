@@ -23,14 +23,32 @@ async function execute(message, serverQueue, queue) {
             "I need the permissions to join and speak in your voice channel!"
         );
     }
+
+    var songs = [];
     var song;
+    var isPlaylist = false;
+
     if (validUrl.isUri(args[1])){
-        var youtubeUrl = args[1];
-        songInfo = await ytdl.getInfo(youtubeUrl);
-        song = {
-            title: songInfo.title,
-            url: songInfo.video_url,
-        };
+        if (args[1].includes('/playlist?')){
+            isPlaylist = true;
+            var searchResult = await getYoutubePlaylist(args[1]);
+
+            searchResult.data.items.forEach(item => {
+                song = {
+                    title: item.snippet.title,
+                    url: 'https://www.youtube.com/watch?v=' + item.snippet.resourceId.videoId
+                }
+                songs.push(song);
+            });
+        }
+        else{
+            var youtubeUrl = args[1];
+            songInfo = await ytdl.getInfo(youtubeUrl);
+            song = {
+                title: songInfo.title,
+                url: songInfo.video_url,
+            };
+        }
     }
     else{
         var i;
@@ -60,7 +78,6 @@ async function execute(message, serverQueue, queue) {
             console.log(err);
         }
     }
-    
 
     if (!serverQueue) {
         // Creating the contract for our queue
@@ -75,7 +92,12 @@ async function execute(message, serverQueue, queue) {
         // Setting the queue using our contract
         queue.set(message.guild.id, queueContruct);
         // Pushing the song to our songs array
-        queueContruct.songs.push(song);
+        if (isPlaylist){
+            queueContruct.songs.push(songs);
+        }
+        else{
+            queueContruct.songs.push(song);
+        }
 
         try {
             // Here we try to join the voicechat and save our connection into our object.
@@ -90,9 +112,17 @@ async function execute(message, serverQueue, queue) {
             return message.channel.send(err);
         }
     } else {
-        serverQueue.songs.push(song);
-        console.log(serverQueue.songs);
-        return message.channel.send(`${song.title} has been added to the queue!`);
+        if (isPlaylist){
+            serverQueue.songs.push(songs);
+            console.log(serverQueue.songs);
+            return message.channel.send(`Playlist has been added to the queue!`);
+        }
+        else{
+            serverQueue.songs.push(song);
+            console.log(serverQueue.songs);
+            return message.channel.send(`${song.title} has been added to the queue!`);
+        }
+        
     }
 }
 
@@ -196,6 +226,16 @@ async function getYoutubeSearch(queryString){
         key: process.env.YOUTUBE_TOKEN,
         part: 'snippet',
         q: queryString
+    });
+}
+
+async function getYoutubePlaylist(playlistId){
+    console.log('Searching for Playlist: ' + playlistId);
+    return google.youtube('v3').playlistItems.list({
+        key: process.env.YOUTUBE_TOKEN,
+        part: 'snippet',
+        playlistId: playlistId,
+        maxResults: 50
     });
 }
 
