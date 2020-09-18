@@ -12,11 +12,16 @@ function execute(message, serverQueue) {
 }
 
 function getLyrics(title, message){
-    geniusclient.tracks.search(title,{limit: 1})
-    .then(results => {
-        const lyrics = results[0];
-        message.channel.send(`**${lyrics.artist.name} - ${lyrics.title}**\n<${lyrics.lyrics}>`)
-    }).catch(err => message.reply(err));
+    try{
+        geniusclient.songs.search(title,{limit: 1})
+        .then(results => {
+            const lyrics = results[0];
+            message.channel.send(`**${lyrics.artist.name} - ${lyrics.title}**\n<${lyrics.lyrics}>`)
+        }).catch(err => message.reply(err));
+    }
+    catch(err){
+        console.log(err);
+    }
 }
 
 module.exports={
