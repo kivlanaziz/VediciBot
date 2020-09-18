@@ -24,6 +24,7 @@ async function getLyrics(title, message){
             var upperlimit = 1024;
             while(lowerlimit < lyrics.length){
                 fields.push({
+                    name: " ",
                     value: lyrics.substring(lowerlimit, upperlimit)
                 });
                 lowerlimit = upperlimit;
@@ -37,12 +38,13 @@ async function getLyrics(title, message){
         }
         else{
             fields.push({
+                name: " ",
                 value: lyrics
             })
         }
 
         const embed = new MessageEmbed()
-            .setTitle(`${songs[0].artist.title} - ${songs[0].title}`)
+            .setTitle(`${songs[0].artist.name} - ${songs[0].title}`)
             .addFields(fields);
 
         message.channel.send(embed);
