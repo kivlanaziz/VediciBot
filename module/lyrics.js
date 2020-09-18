@@ -14,13 +14,36 @@ async function execute(message, serverQueue) {
 async function getLyrics(title, message){
     try{
         const songs = await geniusclient.songs.search(title,{limit: 1});
-        if (songs === 'undefined'){
-            message.reply("No result");
+        
+        const lyrics = await songs[0].lyrics();
+        var fields = [];
+        if (lyrics.length > 1000){
+            var lowerlimit = 0;
+            var upperlimit = 1000;
+            while(lowerlimit < lyrics.length){
+                fields.push({
+                    value: lyrics.substring(lowerlimit, upperlimit)
+                });
+                lowerlimit = upperlimit + 1;
+                if ((lyrics.length - upperlimit) > 2000){
+                    upperlimit += 2000;
+                }
+                else{
+                    upperlimit += (lyrics.length - upperlimit);
+                }
+            }
         }
         else{
-            const lyrics = await songs[0].lyrics();
-            message.channel.send(`**${songs[0].artist.name} - ${songs[0].title}**\n<${lyrics}>`)
+            fields.push({
+                value: lyrics
+            })
         }
+
+        const embed = new MessageEmbed()
+            .setTitle(`${songs[0].artist.title} - ${songs[0].title}`)
+            .addFields(fields);
+
+        message.channel.send(embed);
     }
     catch(err){
         console.log(err);
