@@ -24,7 +24,7 @@ async function getLyrics(title, message){
             var upperlimit = 1024;
             while(lowerlimit < lyrics.length){
                 fields.push({
-                    name: " ",
+                    name: "-",
                     value: lyrics.substring(lowerlimit, upperlimit)
                 });
                 lowerlimit = upperlimit;
@@ -38,7 +38,7 @@ async function getLyrics(title, message){
         }
         else{
             fields.push({
-                name: " ",
+                name: "-",
                 value: lyrics
             })
         }
