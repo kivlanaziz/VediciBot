@@ -19,7 +19,7 @@ async function getLyrics(title, message){
         }
         else{
             const lyrics = await songs[0].lyrics();
-            message.channel.send(`**${songs[0].artist.name} - ${songs[0].title}**\n<${lyrics.lyrics}>`)
+            message.channel.send(`**${songs[0].artist.name} - ${songs[0].title}**\n<${lyrics}>`)
         }
     }
     catch(err){
