@@ -19,16 +19,16 @@ async function getLyrics(title, message){
         
         const lyrics = await songs[0].lyrics();
         var fields = [];
-        if (lyrics.length > 1000){
+        if (lyrics.length > 1024){
             var lowerlimit = 0;
-            var upperlimit = 1000;
+            var upperlimit = 1024;
             while(lowerlimit < lyrics.length){
                 fields.push({
                     value: lyrics.substring(lowerlimit, upperlimit)
                 });
-                lowerlimit = upperlimit + 1;
-                if ((lyrics.length - upperlimit) > 1000){
-                    upperlimit += 1000;
+                lowerlimit = upperlimit;
+                if ((lyrics.length - upperlimit) > 1024){
+                    upperlimit += 1024;
                 }
                 else{
                     upperlimit += (lyrics.length - upperlimit);
