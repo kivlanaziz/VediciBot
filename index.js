@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const { connect } = require('http2');
 const youtube = require("./module/youtube.js");
 const message = require("./module/message.js");
-const lyrics = requre("./module/lyrics.js");
+const lyrics = require("./module/lyrics.js");
 // ------------------ //
 
 const client = new Discord.Client();
