@@ -1,7 +1,7 @@
 const genius = require("genius-lyrics");
 const geniusclient = new genius.Client(process.env.GENIUS_TOKEN); 
 
-async function execute(message, serverQueue) {
+function execute(message, serverQueue) {
     const args = message.content.split(" ");
     if (typeof args[1] === 'undefined'){
         getLyrics(serverQueue.songs[0].title, message);
