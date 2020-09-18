@@ -27,8 +27,8 @@ async function getLyrics(title, message){
                     value: lyrics.substring(lowerlimit, upperlimit)
                 });
                 lowerlimit = upperlimit + 1;
-                if ((lyrics.length - upperlimit) > 2000){
-                    upperlimit += 2000;
+                if ((lyrics.length - upperlimit) > 1000){
+                    upperlimit += 1000;
                 }
                 else{
                     upperlimit += (lyrics.length - upperlimit);
