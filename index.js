@@ -4,6 +4,7 @@ const Discord = require('discord.js');
 const { connect } = require('http2');
 const youtube = require("./module/youtube.js");
 const message = require("./module/message.js");
+const lyrics = requre("./module/lyrics.js");
 // ------------------ //
 
 const client = new Discord.Client();
@@ -46,6 +47,9 @@ client.on('message', (msg) => {
         case 'queue':
             youtube.showQueue(msg, serverQueue);
             break;
+        
+        case 'lyrics':
+            lyrics.execute(msg, serverQueue);
     }
 
 });
