@@ -13,11 +13,14 @@ function execute(message, serverQueue) {
 
 function getLyrics(title, message){
     try{
-        geniusclient.songs.search(title,{limit: 1})
-        .then(results => {
-            const lyrics = results[0];
-            message.channel.send(`**${lyrics.artist.name} - ${lyrics.title}**\n<${await lyrics.lyrics()}>`)
-        }).catch(err => message.reply(err));
+        const songs = await geniusclient.songs.search(title,{limit: 1});
+        if (songs === 'undefined'){
+            message.reply("No result");
+        }
+        else{
+            const lyrics = await songs[0].lyrics();
+            message.channel.send(`**${songs[0].artist.name} - ${songs[0].title}**\n<${lyrics.lyrics}>`)
+        }
     }
     catch(err){
         console.log(err);
