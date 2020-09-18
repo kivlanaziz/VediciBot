@@ -1,5 +1,7 @@
 const genius = require("genius-lyrics");
 const geniusclient = new genius.Client(process.env.GENIUS_TOKEN); 
+const { MessageEmbed } = require('discord.js');
+
 
 async function execute(message, serverQueue) {
     const args = message.content.split(" ");
