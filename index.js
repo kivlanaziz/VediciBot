@@ -35,6 +35,10 @@ client.on('message', (msg) => {
         case 'play':
             youtube.execute(msg, serverQueue, queue);
             break;
+        
+        case 'p':
+            youtube.execute(msg, serverQueue, queue);
+            break;
 
         case 'skip':
             youtube.skip(msg, serverQueue);
@@ -60,8 +64,13 @@ client.on('guildMemberAdd', member => {
     if (!channel) return;
     channel.send(`Welcome to the server, ${member}`);
 
-    var role = member.guild.roles.cache.find((role => role.name === "Member"));
-    member.roles.add(role);
+    try{
+        var role = member.guild.roles.cache.find((role => role.name === "Member"));
+        member.roles.add(role);
+    } catch(err){
+        console.error(err);
+    }
+    
 });
 
 client.login(process.env.token);
