@@ -154,13 +154,8 @@ async function play(guild, song, queue) {
             highWaterMark: 50
         })
         .on("finish", () => {
-            try{
-                serverQueue.songs.shift();
-                play(guild, serverQueue.songs[0], queue);
-            }
-            catch{
-                serverQueue.textChannel.send('Error when reading the queue!');
-            }
+            serverQueue.songs.shift();
+            play(guild, serverQueue.songs[0], queue);
         })
         .on("error", error => console.error(error));
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
