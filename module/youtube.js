@@ -144,13 +144,23 @@ async function play(guild, song, queue) {
     const dispatcher = serverQueue.connection
         .play(await ytdl(song.url, {
             highWaterMark: 1024 * 1024 * 15
+        }).catch(error => {
+            console.error(error);
+            serverQueue.textChannel.send('Cannot play the song!');
+            serverQueue.songs.shift();
+            play(guild, serverQueue.songs[0], queue);
         }),{
             type: 'opus',
             highWaterMark: 50
         })
         .on("finish", () => {
-            serverQueue.songs.shift();
-            play(guild, serverQueue.songs[0], queue);
+            try{
+                serverQueue.songs.shift();
+                play(guild, serverQueue.songs[0], queue);
+            }
+            catch{
+                serverQueue.textChannel.send('Error when reading the queue!');
+            }
         })
         .on("error", error => console.error(error));
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
