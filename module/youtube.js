@@ -147,8 +147,7 @@ async function play(guild, song, queue) {
         }).catch(error => {
             console.error(error);
             serverQueue.textChannel.send('Cannot play the song!');
-            serverQueue.songs.shift();
-            play(guild, serverQueue.songs[0], queue);
+            serverQueue.connection.dispatcher.end();
         }),{
             type: 'opus',
             highWaterMark: 50
