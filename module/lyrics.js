@@ -19,6 +19,10 @@ async function getLyrics(title, message){
         
         const lyrics = await songs[0].lyrics();
         var fields = [];
+        if (lyrics.length >= 6000){
+            message.channel.send("Cannot display the lyrics!");
+            return;
+        }
         if (lyrics.length > 1024){
             var lowerlimit = 0;
             var upperlimit = 1024;
