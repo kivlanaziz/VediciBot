@@ -3,7 +3,7 @@ var listRoles = require("../data/roles.json");
 function assign(reaction, user){
     if (listRoles.hasOwnProperty(reaction.emoji.name)){
         var role = reaction.message.guild.roles.cache.find((role => role.name === listRoles[reaction.emoji.name]));
-        reaction.message.guild.member(user).addRole(listRoles[reaction.emoji.name]).catch(console.error);
+        reaction.message.guild.member(user).roles.add(role.id).catch(console.error);
     }
 }
 
