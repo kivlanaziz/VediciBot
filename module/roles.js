@@ -7,6 +7,13 @@ function assign(reaction, user){
     }
 }
 
+function remove(reaction, user){
+    if (listRoles.hasOwnProperty(reaction.emoji.name)){
+        var role = reaction.message.guild.roles.cache.find((role => role.name === listRoles[reaction.emoji.name]));
+        reaction.message.guild.member(user).roles.remove(role.id).catch(console.error);
+    }
+}
+
 function sendMessage(message){
     if (message.member.hasPermission("ADMINISTRATOR")){
         var rolesMessage = [];
@@ -18,9 +25,9 @@ function sendMessage(message){
         }
 
         const embedList = {
-            color: 0x35FF07,
+            color: 0x52376E,
             title: 'Vedici Auto Role',
-            description: 'Welcome to Vedici Auto Role.\nYou can assign yourself to the available roles in our server.\nHere is the list of the available roles, just click the emoji below to assign yourself.',
+            description: 'Welcome to Vedici Auto Role.\nYou can assign yourself to the available roles in our server.\nHere is the list of the available roles, just react to this message using emoji according to the role number to assign yourself.\nTo remove the role from your account, remove your reaction by clicking again the specified emoji.',
             fields: rolesMessage,
             timestamp: new Date(),
             footer: {
@@ -41,5 +48,6 @@ function sendMessage(message){
 
 module.exports={
     assign: assign,
-    sendMessage: sendMessage
+    sendMessage: sendMessage,
+    remove: remove
 };

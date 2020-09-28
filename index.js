@@ -93,4 +93,20 @@ client.on("messageReactionAdd", async(reaction,user)=>{
     roles.assign(reaction,user);
 })
 
+client.on("messageReactionRemove", async(reaction,user)=>{
+    // When we receive a reaction we check if the reaction is partial or not
+	if (reaction.partial) {
+		// If the message this reaction belongs to was removed the fetching might result in an API error, which we need to handle
+		try {
+			await reaction.fetch();
+		} catch (error) {
+			console.error('Something went wrong when fetching the message: ', error);
+			// Return as `reaction.message.author` may be undefined/null
+			return;
+		}
+    }
+    
+    roles.remove(reaction,user);
+})
+
 client.login(process.env.token);
