@@ -28,10 +28,11 @@ function sendMessage(message){
             },
         };
 
-        const embedMessage = message.channel.send({ embed: embedList });
-        for (var role in listRoles){
-            embedMessage.react(role);
-        }
+        message.channel.send({ embed: embedList }).then(sentEmbed => {
+            for (var role in listRoles){
+                sentEmbed.react(role);
+            }
+        });
     }
     else{
         message.reply("You are not Administrator!");
