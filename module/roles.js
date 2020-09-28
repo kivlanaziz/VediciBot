@@ -28,9 +28,9 @@ function sendMessage(message){
             },
         };
 
-        const embedMessage = await message.channel.send({ embed: embedList });
+        const embedMessage = message.channel.send({ embed: embedList });
         for (var role in listRoles){
-            await embedMessage.react(role);
+            embedMessage.react(role);
         }
     }
     else{
