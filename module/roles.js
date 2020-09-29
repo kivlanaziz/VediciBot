@@ -19,8 +19,8 @@ function sendMessage(message){
         var rolesMessage = [];
         for (var role in listRoles){
             rolesMessage.push({
-                name: role,
-                value: listRoles[role] 
+                name: '---',
+                value: role + ' - ' + listRoles[role] 
             });
         }
 
