@@ -55,9 +55,11 @@ client.on('message', (msg) => {
         
         case 'lyrics':
             lyrics.execute(msg, serverQueue);
+            break;
 
         case 'rolesMessage':
             roles.sendMessage(msg);
+            break;
     }
 
 });
