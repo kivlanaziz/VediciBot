@@ -67,7 +67,7 @@ client.on('message', (msg) => {
 client.on('guildMemberAdd', member => {
     const channel = member.guild.channels.cache.find(ch => ch.name === 'public');
 
-    if (!channel) return;
+    if (channel)
     channel.send(`Welcome to the server, ${member}`);
 
     try{
