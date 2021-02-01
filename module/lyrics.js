@@ -19,18 +19,23 @@ async function getLyrics(title, message){
     try{
         const lyrics = await finder("", title);
         
-        var fields = [];
-        if (lyrics.length >= 6000){
-            message.channel.send("Cannot display the lyrics!");
-            return;
+        if (lyrics){
+            if (lyrics.length >= 6000){
+                message.channel.send("Cannot display the lyrics!");
+                return;
+            }
+            for(let i = 0; i < lyrics.length; i += 2000) {
+                const toSend = lyrics.substring(i, Math.min(lyrics.length, i + 2000));
+                      const message_embed = new MessageEmbed()
+                        .setColor("RANDOM")
+                        .setTitle(title)
+                        .setDescription(toSend)
+                      message.channel.send(message_embed)
+            }
         }
-        for(let i = 0; i < lyrics.length; i += 2000) {
-            const toSend = lyrics.substring(i, Math.min(lyrics.length, i + 2000));
-                  const message_embed = new MessageEmbed()
-                    .setColor("RANDOM")
-                    .setTitle(title)
-                    .setDescription(toSend)
-                  message.channel.send(message_embed)
+        else{
+            message.channel.send("Sorry we could not find the lyrics.");
+            return;
         }
     }
     catch(err){
