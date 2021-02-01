@@ -47,7 +47,7 @@ async function getLyrics(title, message){
         }
 
         const embed = new MessageEmbed()
-            .setTitle(`${songs[0].artist.name} - ${songs[0].title}`)
+            .setTitle(title)
             .addFields(fields);
 
         message.channel.send(embed);
