@@ -6,7 +6,7 @@ function whitelist(title){
     var newTitle = title.toString();
     var whitelist = ["Official Video", "OFFICIAL MUSIC VIDEO", "Music Video"];
     whitelist.forEach(item => {
-        newTitle = newTitle.replaceAll(item,"");
+        newTitle = newTitle.replace(item,"");
     });
 
     return newTitle;
