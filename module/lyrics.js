@@ -1,5 +1,5 @@
-const genius = require("genius-lyrics");
-const geniusclient = new genius.Client(process.env.GENIUS_TOKEN); 
+const finder = require("lyrics-finder");
+
 const { MessageEmbed } = require('discord.js');
 
 
@@ -15,9 +15,8 @@ async function execute(message, serverQueue) {
 
 async function getLyrics(title, message){
     try{
-        const songs = await geniusclient.songs.search(title,{limit: 1});
+        const lyrics = await finder("", title);
         
-        const lyrics = await songs[0].lyrics();
         var fields = [];
         if (lyrics.length >= 6000){
             message.channel.send("Cannot display the lyrics!");
