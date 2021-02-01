@@ -26,7 +26,7 @@ async function getLyrics(title, message){
         }
         for(let i = 0; i < lyrics.length; i += 2000) {
             const toSend = lyrics.substring(i, Math.min(lyrics.length, i + 2000));
-                  const message_embed = new Embed.MessageEmbed()
+                  const message_embed = new MessageEmbed()
                     .setColor("RANDOM")
                     .setTitle(title)
                     .setDescription(toSend)
