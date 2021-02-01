@@ -11,6 +11,7 @@ async function execute(message, serverQueue) {
     else{
         args.splice(0,1);
         args.join();
+        args = args.replaceAll('\n','');
         getLyrics(args, message);
     }
 }
@@ -24,35 +25,14 @@ async function getLyrics(title, message){
             message.channel.send("Cannot display the lyrics!");
             return;
         }
-        if (lyrics.length > 1024){
-            var lowerlimit = 0;
-            var upperlimit = 1024;
-            while(lowerlimit < lyrics.length){
-                fields.push({
-                    name: "-",
-                    value: lyrics.substring(lowerlimit, upperlimit)
-                });
-                lowerlimit = upperlimit;
-                if ((lyrics.length - upperlimit) > 1024){
-                    upperlimit += 1024;
-                }
-                else{
-                    upperlimit += (lyrics.length - upperlimit);
-                }
-            }
+        for(let i = 0; i < lyrics.length; i += 2000) {
+            const toSend = lyrics.substring(i, Math.min(lyrics.length, i + 2000));
+                  const message_embed = new Embed.MessageEmbed()
+                    .setColor("RANDOM")
+                    .setTitle(title)
+                    .setDescription(toSend)
+                  message.channel.send(message_embed)
         }
-        else{
-            fields.push({
-                name: "-",
-                value: lyrics
-            })
-        }
-
-        const embed = new MessageEmbed()
-            .setTitle(title)
-            .addFields(fields);
-
-        message.channel.send(embed);
     }
     catch(err){
         console.log(err);
