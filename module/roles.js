@@ -56,7 +56,7 @@ function updateRoles(message){
             console.log("Updating Roles of: " + member);
             member.roles.add(GAMES_ROLES_ID).catch(console.error);
             member.roles.add(MOVIES_ROLES_ID).catch(console.error);
-            member.roles.add(MOVIES_ROLES_ID).catch(console.error);
+            member.roles.add(MUSIC_ROLES_ID).catch(console.error);
         });
     }
     else{
