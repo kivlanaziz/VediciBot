@@ -11,7 +11,6 @@ async function execute(message, serverQueue) {
     else{
         args.splice(0,1);
         args.join();
-        args = args.replace(/(\r\n|\n|\r)/gm, "");
         getLyrics(args, message);
     }
 }
