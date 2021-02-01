@@ -2,12 +2,22 @@ const finder = require("lyrics-finder");
 
 const { MessageEmbed } = require('discord.js');
 
+function whitelist(title){
+    var newTitle = title.toString();
+    var whitelist = ["Official Video", "OFFICIAL MUSIC VIDEO", "Music Video"];
+    whitelist.forEach(item => {
+        newTitle = newTitle.replaceAll(item,"");
+    });
+
+    return newTitle;
+}
 
 async function execute(message, serverQueue) {
     const args = message.content.split(" ");
     if (typeof args[1] === 'undefined'){
         if (serverQueue){
-            getLyrics(serverQueue.songs[0].title, message);
+            var title = whitelist(serverQueue.songs[0].title);
+            getLyrics(title, message);
         }
         else{
             message.channel.send("Play a song first!");
