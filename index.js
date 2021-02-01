@@ -60,6 +60,10 @@ client.on('message', (msg) => {
         case 'rolesMessage':
             roles.sendMessage(msg);
             break;
+
+        case 'updateRoles':
+            roles.updateRoles(msg);
+            break;
     }
 
 });

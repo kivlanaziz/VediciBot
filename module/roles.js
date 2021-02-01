@@ -46,8 +46,24 @@ function sendMessage(message){
     }
 }
 
+function updateRoles(message){
+    if (message.member.hasPermission("ADMINISTRATOR")){
+        var GAMES_ROLES_ID = "805759803791376404";
+        var MOVIES_ROLES_ID = "805762970604404736";
+
+        message.guild.members.cache.forEach(member => {
+            member.roles.add(GAMES_ROLES_ID).catch(console.error);
+            member.roles.add(MOVIES_ROLES_ID).catch(console.error);
+        });
+    }
+    else{
+        message.reply("You are not Administrator!");
+    }
+}
+
 module.exports={
     assign: assign,
     sendMessage: sendMessage,
-    remove: remove
+    remove: remove,
+    updateRoles: updateRoles
 };
