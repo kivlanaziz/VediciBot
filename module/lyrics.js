@@ -9,7 +9,8 @@ async function execute(message, serverQueue) {
         getLyrics(serverQueue.songs[0].title, message);
     } 
     else{
-        getLyrics(args[1], message);
+        args.splice(0,1);
+        getLyrics(args, message);
     }
 }
 
