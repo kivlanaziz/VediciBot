@@ -9,6 +9,14 @@ function help (message, PREFIX){
         name: PREFIX + "play *-songName*",
         value: "Play an audio based on the song name"
     })
+    helpMessage.push({
+        name: PREFIX + "lyrics *-songName*",
+        value: "Display the lyrics from the requested song"
+    })
+    helpMessage.push({
+        name: PREFIX + "lyrics",
+        value: "Display the lyrics of the currently played song"
+    })
     //Skip message
     helpMessage.push({
         name: PREFIX + "skip",
