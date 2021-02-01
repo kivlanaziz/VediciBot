@@ -10,6 +10,7 @@ async function execute(message, serverQueue) {
     } 
     else{
         args.splice(0,1);
+        args.join();
         getLyrics(args, message);
     }
 }
