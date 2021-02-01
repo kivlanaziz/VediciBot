@@ -6,7 +6,7 @@ const { MessageEmbed } = require('discord.js');
 async function execute(message, serverQueue) {
     const args = message.content.split(" ");
     if (typeof args[1] === 'undefined'){
-        if (serverQueue.songs){
+        if (serverQueue){
             getLyrics(serverQueue.songs[0].title, message);
         }
         else{
@@ -16,8 +16,9 @@ async function execute(message, serverQueue) {
     } 
     else{
         args.splice(0,1);
-        args.join();
-        getLyrics(args, message);
+        var title = args.join();
+        title = title.toString().replace(/(\r\n|\n|\r)/gm, "");
+        getLyrics(title, message);
     }
 }
 
