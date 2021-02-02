@@ -28,7 +28,7 @@ async function execute(message, serverQueue) {
         args.splice(0,1);
         var title = args.join();
         title = title.toString().replace(/(\r\n|\n|\r)/gm, "");
-        title = title.toString().replace(/,/gm, "");
+        title = title.toString().replace(/,/gm, " ");
         getLyrics(title, message);
     }
 }
