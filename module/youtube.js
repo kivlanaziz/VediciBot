@@ -165,8 +165,11 @@ async function play(guild, song, queue) {
             type: 'opus'
         })
         .on("finish", () => {
-            serverQueue.songs.shift();
-            play(guild, serverQueue.songs[0], queue);
+            setTimeout(() => {
+                console.log("Stream Ended, Waiting 200ms");
+                serverQueue.songs.shift();
+                play(guild, serverQueue.songs[0], queue);
+            }, 200);
         })
         .on("error", (err) => {
             serverQueue.songs.shift();
