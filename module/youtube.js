@@ -150,8 +150,11 @@ async function play(guild, song, queue) {
         }).catch(error => {
             console.error(error);
             serverQueue.textChannel.send('Cannot play the song!');
+            console.log("[DEBUG] Error Message Sent!");
             serverQueue.songs.shift();
+            console.log("[DEBUG] Song Queue Shifted!");
             play(guild, serverQueue.songs[0], queue);
+            console.log("[DEBUG] Next Song Played!");
         }),{
             type: 'opus',
             highWaterMark: 50
@@ -166,7 +169,6 @@ async function play(guild, song, queue) {
 
 function skip(message, serverQueue) {
     const args = message.content.split(" ");
-    console.log(args[1]);
     if (!message.member.voice.channel)
         return message.channel.send(
             "You have to be in a voice channel to stop the music!"
@@ -180,6 +182,7 @@ function skip(message, serverQueue) {
     else{
         if (serverQueue.songs[args[1] - 1] !== 'undefined'){
             serverQueue.songs.splice(args[1] - 1,1);
+            return message.channel.send("Song at index: " + args[1] + " is deleted from queue!");
         }
         else{
             return message.channel.send("There is no queued song at index " + args[1]);
