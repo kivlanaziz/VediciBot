@@ -144,25 +144,37 @@ async function play(guild, song, queue) {
         queue.delete(guild.id);
         return;
     }
-    const dispatcher = serverQueue.connection
-        .play(await ytdl(song.url, {
-            highWaterMark: 1024 * 1024 * 15
-        }).catch(error => {
-            console.error(error);
-            serverQueue.textChannel.send('Cannot play the song!');
-            console.log("[DEBUG] Error Message Sent!");
+
+    let stream = null;
+
+    try{
+        stream = await ytdl(song.url, { highWaterMark: 1 << 25 });
+    }catch(error){
+        console.error(error);
+        serverQueue.textChannel.send('Cannot play the song!');
+        console.log("[DEBUG] Error Message Sent!");
+        if (serverQueue){
             serverQueue.songs.shift();
             console.log("[DEBUG] Song Queue Shifted!");
             play(guild, serverQueue.songs[0], queue);
             console.log("[DEBUG] Next Song Played!");
-        }),{
-            type: 'opus',
-            highWaterMark: 50
+        }    
+    }
+
+    const dispatcher = serverQueue.connection
+        .play(stream,{
+            type: 'opus'
         })
         .on("finish", () => {
             serverQueue.songs.shift();
             play(guild, serverQueue.songs[0], queue);
+        })
+        .on("error", (err) => {
+            console.error(err);
+            serverQueue.songs.shift();
+            play(guild, serverQueue.songs[0], queue);
         });
+
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
     serverQueue.textChannel.send(`Start playing: **${song.title}**`);
 }
