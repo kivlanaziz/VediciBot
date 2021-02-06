@@ -39,17 +39,14 @@ async function execute(message, serverQueue, queue) {
             var playlistId = urlSearchParam.get('list');
             var searchResult = await getYoutubePlaylist(playlistId);
             console.log(searchResult);
-            for(const item of searchResult.data.items) {
+            searchResult.data.items.forEach(item => {
                 console.log('song url: https://www.youtube.com/watch?v=' + item.snippet.resourceId.videoId);
-                
-                var youtubeUrl = 'https://www.youtube.com/watch?v='+item.snippet.resourceId.videoId;
-                songInfo = await ytdl.getInfo(youtubeUrl);
                 song = {
-                    title: songInfo.videoDetails.title,
-                    url: songInfo.videoDetails.video_url,
-                };
+                    title: item.snippet.title,
+                    url: 'https://www.youtube.com/watch?v=' + item.snippet.resourceId.videoId
+                }
                 songs.push(song);
-            }
+            });
         }
         else{
             var youtubeUrl = args[1];
