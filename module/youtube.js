@@ -39,7 +39,7 @@ async function execute(message, serverQueue, queue) {
             var playlistId = urlSearchParam.get('list');
             var searchResult = await getYoutubePlaylist(playlistId);
             console.log(searchResult);
-            searchResult.data.items.forEach(item => {
+            for(const item of searchResult.data.items) {
                 console.log('song url: https://www.youtube.com/watch?v=' + item.snippet.resourceId.videoId);
                 
                 var youtubeUrl = 'https://www.youtube.com/watch?v='+item.snippet.resourceId.videoId;
@@ -49,7 +49,7 @@ async function execute(message, serverQueue, queue) {
                     url: songInfo.videoDetails.video_url,
                 };
                 songs.push(song);
-            });
+            }
         }
         else{
             var youtubeUrl = args[1];
