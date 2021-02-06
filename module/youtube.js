@@ -148,13 +148,10 @@ async function play(guild, song, queue) {
     try{
         stream = await ytdl(song.url, { highWaterMark: 1 << 25 });
     }catch(error){
-        serverQueue.textChannel.send('Cannot play the song!');
-        console.log("[DEBUG] Error Message Sent!");
+        serverQueue.textChannel.send(`Sorry we are unable to play: **${song.title}**, skipping to the next song!`);
         if (serverQueue){
             serverQueue.songs.shift();
-            console.log("[DEBUG] Song Queue Shifted!");
             play(guild, serverQueue.songs[0], queue);
-            console.log("[DEBUG] Next Song Played!");
         }    
     }
 
