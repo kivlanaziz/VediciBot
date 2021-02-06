@@ -49,15 +49,15 @@ async function execute(message, serverQueue, queue) {
             });
         }
         else{
-            /*
+            
             var youtubeUrl = args[1];
             songInfo = await ytdl.getInfo(youtubeUrl);
             song = {
-                title: songInfo.title,
-                url: songInfo.video_url,
+                title: songInfo.videoDetails.title,
+                url: songInfo.videoDetails.video_url,
             };
-            */
-            return message.channel.send("Sorry, feature play by url is temporarily disabled!");
+            
+            //return message.channel.send("Sorry, feature play by url is temporarily disabled!");
         }
     }
     else{
