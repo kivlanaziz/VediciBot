@@ -41,22 +41,23 @@ async function execute(message, serverQueue, queue) {
             console.log(searchResult);
             searchResult.data.items.forEach(item => {
                 console.log('song url: https://www.youtube.com/watch?v=' + item.snippet.resourceId.videoId);
+                
+                var youtubeUrl = 'https://www.youtube.com/watch?v='+item.snippet.resourceId.videoId;
+                songInfo = await ytdl.getInfo(youtubeUrl);
                 song = {
-                    title: item.snippet.title,
-                    url: 'https://www.youtube.com/watch?v=' + item.snippet.resourceId.videoId
-                }
+                    title: songInfo.videoDetails.title,
+                    url: songInfo.videoDetails.video_url,
+                };
                 songs.push(song);
             });
         }
         else{
-            
             var youtubeUrl = args[1];
             songInfo = await ytdl.getInfo(youtubeUrl);
             song = {
                 title: songInfo.videoDetails.title,
                 url: songInfo.videoDetails.video_url,
             };
-            
             //return message.channel.send("Sorry, feature play by url is temporarily disabled!");
         }
     }
@@ -70,7 +71,6 @@ async function execute(message, serverQueue, queue) {
             var searchResult = await getYoutubeSearch(queryString);
             
             var videoId = searchResult.data.items[0].id.videoId;
-            var title = searchResult.data.items[0].snippet.title;
             if (typeof videoId === 'undefined'){
                 return message.channel.send(
                     "Cannot find the video"
@@ -78,9 +78,10 @@ async function execute(message, serverQueue, queue) {
             }
             else{
                 var youtubeUrl = 'https://www.youtube.com/watch?v='+videoId;
+                songInfo = await ytdl.getInfo(youtubeUrl);
                 song = {
-                    title: title,
-                    url: youtubeUrl,
+                    title: songInfo.videoDetails.title,
+                    url: songInfo.videoDetails.video_url,
                 };
             }
         }
