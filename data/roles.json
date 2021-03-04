@@ -1,6 +1,48 @@
 {
-    "\u0031\u20E3":"Among-Us",
-    "\u0032\u20E3":"Mobile-Legend",
-    "\u0033\u20E3":"PUBG",
-    "\u0034\u20E3":"GTA-V"
+    "games": [
+        {
+            "name":"Among-Us",
+            "emoji":"\u0031\u20E3"
+        },
+        {
+            "name":"Mobile-Legend",
+            "emoji":"\u0032\u20E3"
+        },
+        {
+            "name":"PUBG",
+            "emoji":"\u0033\u20E3"
+        },
+        {
+            "name":"GTA-V",
+            "emoji":"\u0034\u20E3"
+        },
+        {
+            "name":"R6",
+            "emoji":"\u0035\u20E3"
+        }
+    ],
+    "movies": [
+        {
+            "name":"MCU",
+            "emoji":"🔴"
+        },
+        {
+            "name":"DCU",
+            "emoji":"🦇"
+        }
+    ],
+    "musics": [
+        {
+            "name":"EDM",
+            "emoji":"🎧"
+        },
+        {
+            "name":"Pop",
+            "emoji":"🎤"
+        },
+        {
+            "name":"Classic",
+            "emoji":"🎻"
+        }
+    ]
 }

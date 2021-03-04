@@ -5,7 +5,8 @@ const { connect } = require('http2');
 const youtube = require("./module/youtube.js");
 const message = require("./module/message.js");
 const lyrics = require("./module/lyrics.js");
-const roles = require("./module/roles.js")
+const roles = require("./module/roles.js");
+require('dotenv').config();
 // ------------------ //
 
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
@@ -59,6 +60,10 @@ client.on('message', (msg) => {
 
         case 'rolesMessage':
             roles.sendMessage(msg);
+            break;
+
+        case 'updateMessage':
+            roles.updateMessage(msg);
             break;
 
         case 'updateRoles':
