@@ -176,6 +176,7 @@ async function play(guild, song, queue) {
 
 module.exports={
     name: "play",
+    aliases: ["p"],
     description: "Play Music",
     execute: execute
 };
