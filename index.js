@@ -47,13 +47,15 @@ client.on('message', (message) => {
 
 client.on('guildMemberAdd', member => {
     const channel = member.guild.channels.cache.find(ch => ch.name === 'public');
-
+    
     if (channel)
     channel.send(`Welcome to the server, ${member}`);
 
+    const command = client.commands.get("defaultroles");
+    if (!command) return;
+
     try{
-        var role = member.guild.roles.cache.find((role => role.name === "Member"));
-        member.roles.add(role);
+        command.execute(member);
     } catch(err){
         console.error(err);
     }
