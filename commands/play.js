@@ -1,14 +1,13 @@
 // --- Dependency --- //
 const ytdl = require("ytdl-core-discord");
 const validUrl = require("valid-url");
-const { connect } = require('http2');
-const { google } = require('googleapis');
-const { youtube } = require("googleapis/build/src/apis/youtube");
-const paginationEmbed = require('discord.js-pagination');
-const { MessageEmbed } = require('discord.js');
+var util = require("../utility/youtubeutil");
+
 // ------------------ //
 
-async function execute(message, serverQueue, queue) {
+async function execute(message) {
+    const serverQueue = message.client.queue.get(message.guild.id);
+    console.log(serverQueue);
     const args = message.content.split(" ");
     if (typeof args[1] === 'undefined')
         return message.channel.send(
@@ -37,7 +36,7 @@ async function execute(message, serverQueue, queue) {
             var urlSearchParam = new URLSearchParams('?'+url[1]);
             console.log('urlSearchParam: '+'?'+url[1]);
             var playlistId = urlSearchParam.get('list');
-            var searchResult = await getYoutubePlaylist(playlistId);
+            var searchResult = await util.getYoutubePlaylist(playlistId);
             console.log(searchResult);
             searchResult.data.items.forEach(item => {
                 console.log('song url: https://www.youtube.com/watch?v=' + item.snippet.resourceId.videoId);
@@ -65,7 +64,7 @@ async function execute(message, serverQueue, queue) {
             queryString += args[i] + " ";
         }
         try{
-            var searchResult = await getYoutubeSearch(queryString);
+            var searchResult = await util.getYoutubeSearch(queryString);
             
             var videoId = searchResult.data.items[0].id.videoId;
             if (typeof videoId === 'undefined'){
@@ -89,7 +88,7 @@ async function execute(message, serverQueue, queue) {
 
     if (!serverQueue) {
         // Creating the contract for our queue
-        const queueContruct = {
+        const queueConstruct = {
             textChannel: message.channel,
             voiceChannel: voiceChannel,
             connection: null,
@@ -98,26 +97,26 @@ async function execute(message, serverQueue, queue) {
             playing: true,
         };
         // Setting the queue using our contract
-        queue.set(message.guild.id, queueContruct);
+        message.client.queue.set(message.guild.id, queueConstruct);
         // Pushing the song to our songs array
         if (isPlaylist){
-            queueContruct.songs.push(...songs);
+            queueConstruct.songs.push(...songs);
             message.channel.send(`Playlist has been added to the queue!`);
         }
         else{
-            queueContruct.songs.push(song);
+            queueConstruct.songs.push(song);
         }
 
         try {
             // Here we try to join the voicechat and save our connection into our object.
             var connection = await voiceChannel.join();
-            queueContruct.connection = connection;
+            queueConstruct.connection = connection;
             // Calling the play function to start a song
-            play(message.guild, queueContruct.songs[0], queue);
+            play(message.guild, queueConstruct.songs[0], message.client.queue);
         } catch (err) {
             // Printing the error message if the bot fails to join the voicechat
             console.log(err);
-            queue.delete(message.guild.id);
+            message.client.queue.delete(message.guild.id);
             return message.channel.send(err);
         }
     } else {
@@ -175,113 +174,9 @@ async function play(guild, song, queue) {
     serverQueue.textChannel.send(`Start playing: **${song.title}**`);
 }
 
-function skip(message, serverQueue) {
-    const args = message.content.split(" ");
-    if (!message.member.voice.channel)
-        return message.channel.send(
-            "You have to be in a voice channel to stop the music!"
-        );
-    if (!serverQueue)
-        return message.channel.send("There is no song that I could skip!");
-    
-    if (typeof args[1] === 'undefined'){
-        serverQueue.connection.dispatcher.end();
-    }
-    else{
-        if (serverQueue.songs[args[1] - 1] !== 'undefined'){
-            serverQueue.songs.splice(args[1] - 1,1);
-            return message.channel.send("Song at index: " + args[1] + " is deleted from queue!");
-        }
-        else{
-            return message.channel.send("There is no queued song at index " + args[1]);
-        }
-    }
-}
-
-function stop(message, serverQueue) {
-    if (!message.member.voice.channel)
-        return message.channel.send(
-            "You have to be in a voice channel to stop the music!"
-        );
-    serverQueue.songs = [];
-    serverQueue.connection.dispatcher.end();
-}
-
-function showQueue(message, serverQueue) {
-    var list = [];
-    var index = 0;
-    var pages = [];
-    if (!serverQueue)
-        return message.channel.send("Queue is Empty!");
-
-    serverQueue.songs.forEach(song => {
-        console.log(song.title);
-        index++;
-        
-        if (index == 1){
-            list.push({
-                name: "[" + index +"] " + song.title + " (Playing)",
-                value: song.url
-            });
-        }
-        else{
-            list.push({
-                name: "[" + index +"] " + song.title,
-                value: song.url
-            });
-        }
-
-        if (index % 10 == 0){
-            const embed = new MessageEmbed()
-                .setColor('0x0099ff')
-                .setTitle('Vedici Live Music Queue')
-                .setAuthor('Requested by: '+message.member.user.username)
-                .setDescription('Vedici Bot')
-                .addFields(list);
-            
-            pages.push(embed);
-            list = [];
-        }
-    });
-
-    if (typeof list != "undefined" && list != null && list.length != null
-    && list.length > 0){
-        const embed = new MessageEmbed()
-            .setColor('0x0099ff')
-            .setTitle('Vedici Live Music Queue')
-            .setAuthor('Requested by: '+message.member.user.username)
-            .setDescription('Vedici Bot')
-            .addFields(list);
-        
-        pages.push(embed);
-        list = [];
-    }
-
-    paginationEmbed(message, pages);
-}
-
-async function getYoutubeSearch(queryString){
-    console.log('querying: ' + queryString);
-    return google.youtube('v3').search.list({
-        key: process.env.YOUTUBE_TOKEN,
-        part: 'snippet',
-        q: queryString
-    });
-}
-
-async function getYoutubePlaylist(playlistId){
-    console.log('Searching for Playlist: ' + playlistId);
-    return google.youtube('v3').playlistItems.list({
-        key: process.env.YOUTUBE_TOKEN,
-        part: 'snippet',
-        playlistId: playlistId,
-        maxResults: 50
-    });
-}
-
 module.exports={
-    execute: execute,
-    skip: skip,
-    stop: stop,
-    showQueue: showQueue
+    name: "play",
+    aliases: ["p"],
+    description: "Play Music",
+    execute: execute
 };

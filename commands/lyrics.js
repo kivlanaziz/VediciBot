@@ -1,38 +1,6 @@
+var util = require("../utility/lyricsutil");
 const finder = require("lyrics-finder");
-
 const { MessageEmbed } = require('discord.js');
-
-function cleanUpTitle(title){
-    var newTitle = title.toString();
-    var blacklist = ["Official Video", "OFFICIAL MUSIC VIDEO", "Music Video"];
-    blacklist.forEach(item => {
-        var regexp = new RegExp(item,"gi");
-        newTitle = newTitle.replace(regexp,"");
-    });
-
-    return newTitle;
-}
-
-async function execute(message, serverQueue) {
-    const args = message.content.split(" ");
-    if (typeof args[1] === 'undefined'){
-        if (serverQueue){
-            var title = cleanUpTitle(serverQueue.songs[0].title);
-            getLyrics(title, message);
-        }
-        else{
-            message.channel.send("Play a song first!");
-            return;
-        }
-    } 
-    else{
-        args.splice(0,1);
-        var title = args.join();
-        title = title.toString().replace(/(\r\n|\n|\r)/gm, "");
-        title = title.toString().replace(/,/gm, " ");
-        getLyrics(title, message);
-    }
-}
 
 async function getLyrics(title, message){
     try{
@@ -62,6 +30,30 @@ async function getLyrics(title, message){
     }
 }
 
+async function execute(message) {
+    const serverQueue = message.client.queue.get(message.guild.id);
+    const args = message.content.split(" ");
+    if (typeof args[1] === 'undefined'){
+        if (serverQueue){
+            var title = util.cleanUpTitle(serverQueue.songs[0].title);
+            getLyrics(title, message);
+        }
+        else{
+            message.channel.send("Play a song first!");
+            return;
+        }
+    } 
+    else{
+        args.splice(0,1);
+        var title = args.join();
+        title = title.toString().replace(/(\r\n|\n|\r)/gm, "");
+        title = title.toString().replace(/,/gm, " ");
+        getLyrics(title, message);
+    }
+}
+
 module.exports={
+    name: "lyrics",
+    description: "Display lyrics of the specified song",
     execute: execute
 };

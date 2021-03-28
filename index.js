@@ -1,87 +1,62 @@
-
 // --- Dependency --- //
+const fs = require('fs');
 const Discord = require('discord.js');
-const { connect } = require('http2');
-const youtube = require("./module/youtube.js");
-const message = require("./module/message.js");
-const lyrics = require("./module/lyrics.js");
-const roles = require("./module/roles.js");
 require('dotenv').config();
 // ------------------ //
 
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+client.commands = new Discord.Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.name, command);
+}
+
 const PREFIX = '-';
 
-const queue = new Map();
+client.queue = new Map();
 
 client.on('ready', () => {
     console.log('VediciBot Reporting!');
     client.user.setActivity('-help')
 });
 
-client.on('message', (msg) => {
-    if (msg.content.includes('hi vedici')) {
-        msg.reply('Hi! :)');
+client.on('message', (message) => {
+    if (message.content.includes('hi vedici')) {
+        message.reply('Hi! :)');
     }
-    if (msg.content[0] != PREFIX){
+    if (message.content[0] != PREFIX){
         return;
     }
-    let args = msg.content.substring(PREFIX.length).split(" ");
-    const serverQueue = queue.get(msg.guild.id);
+    let args = message.content.substring(PREFIX.length).split(" ");
 
-    switch (args[0]) {
-        case 'help' :
-            message.help(msg, PREFIX);
-            break;
-            
-        case 'play':
-            youtube.execute(msg, serverQueue, queue);
-            break;
-        
-        case 'p':
-            youtube.execute(msg, serverQueue, queue);
-            break;
+    const commandName = args.shift().toLowerCase();
+    const command = client.commands.get(commandName) ||
+                    client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
 
-        case 'skip':
-            youtube.skip(msg, serverQueue);
-            break;
+    if (!command) return;
 
-        case 'stop':
-            youtube.stop(msg, serverQueue);
-            break;
-
-        case 'queue':
-            youtube.showQueue(msg, serverQueue);
-            break;
-        
-        case 'lyrics':
-            lyrics.execute(msg, serverQueue);
-            break;
-
-        case 'rolesMessage':
-            roles.sendMessage(msg);
-            break;
-
-        case 'updateMessage':
-            roles.updateMessage(msg);
-            break;
-
-        case 'updateRoles':
-            roles.updateRoles(msg);
-            break;
+    try {
+        command.execute(message, args);
+    } catch (error){
+        console.log(error);
+        message.reply('Sorry, we encountered some error when executing the command.');
     }
-
+    
 });
 
 client.on('guildMemberAdd', member => {
     const channel = member.guild.channels.cache.find(ch => ch.name === 'public');
-
+    
     if (channel)
     channel.send(`Welcome to the server, ${member}`);
 
+    const command = client.commands.get("defaultroles");
+    if (!command) return;
+
     try{
-        var role = member.guild.roles.cache.find((role => role.name === "Member"));
-        member.roles.add(role);
+        command.execute(member);
     } catch(err){
         console.error(err);
     }
@@ -89,6 +64,8 @@ client.on('guildMemberAdd', member => {
 });
 
 client.on("messageReactionAdd", async(reaction,user)=>{
+    const command = client.commands.get("assignrole");
+    if (!command) return;
     // When we receive a reaction we check if the reaction is partial or not
 	if (reaction.partial) {
 		// If the message this reaction belongs to was removed the fetching might result in an API error, which we need to handle
@@ -101,10 +78,12 @@ client.on("messageReactionAdd", async(reaction,user)=>{
 		}
     }
     
-    roles.assign(reaction,user);
+    command.execute(reaction,user);
 })
 
 client.on("messageReactionRemove", async(reaction,user)=>{
+    const command = client.commands.get("removerole");
+    if (!command) return;
     // When we receive a reaction we check if the reaction is partial or not
 	if (reaction.partial) {
 		// If the message this reaction belongs to was removed the fetching might result in an API error, which we need to handle
@@ -117,7 +96,7 @@ client.on("messageReactionRemove", async(reaction,user)=>{
 		}
     }
     
-    roles.remove(reaction,user);
+    command.execute(reaction,user);
 })
 
 client.login(process.env.token);
