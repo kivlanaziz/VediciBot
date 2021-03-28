@@ -1,7 +1,8 @@
 // --- Dependency --- //
 const ytdl = require("ytdl-core-discord");
 const validUrl = require("valid-url");
-var util = require("../utility/youtubeutil");
+var ytutil = require("../utility/youtubeutil");
+var scutil = require("../utility/scutil");
 
 // ------------------ //
 
@@ -36,7 +37,7 @@ async function execute(message) {
             var urlSearchParam = new URLSearchParams('?'+url[1]);
             console.log('urlSearchParam: '+'?'+url[1]);
             var playlistId = urlSearchParam.get('list');
-            var searchResult = await util.getYoutubePlaylist(playlistId);
+            var searchResult = await ytutil.getYoutubePlaylist(playlistId);
             console.log(searchResult);
             searchResult.data.items.forEach(item => {
                 console.log('song url: https://www.youtube.com/watch?v=' + item.snippet.resourceId.videoId);
@@ -46,6 +47,9 @@ async function execute(message) {
                 }
                 songs.push(song);
             });
+        }
+        else if(scutil.scRegex.test(args[1])){
+            song = await scutil.getSong(song, args[1])
         }
         else{
             var youtubeUrl = args[1];
@@ -64,7 +68,7 @@ async function execute(message) {
             queryString += args[i] + " ";
         }
         try{
-            var searchResult = await util.getYoutubeSearch(queryString);
+            var searchResult = await ytutil.getYoutubeSearch(queryString);
             
             var videoId = searchResult.data.items[0].id.videoId;
             if (typeof videoId === 'undefined'){
