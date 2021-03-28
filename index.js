@@ -47,12 +47,7 @@ client.on('message', (message) => {
 });
 
 client.on('guildMemberAdd', member => {
-    const channel = member.guild.channels.cache.find(ch => ch.name === 'public');
-    
-    if (channel)
-    channel.send(`Welcome to the server, ${member}`);
-
-    const command = client.commands.get("defaultroles");
+    var command = client.commands.get("welcomemessage");
     if (!command) return;
 
     try{
@@ -60,7 +55,15 @@ client.on('guildMemberAdd', member => {
     } catch(err){
         console.error(err);
     }
-    
+
+    command = client.commands.get("defaultroles");
+    if (!command) return;
+
+    try{
+        command.execute(member);
+    } catch(err){
+        console.error(err);
+    }
 });
 
 client.on("messageReactionAdd", async(reaction,user)=>{
