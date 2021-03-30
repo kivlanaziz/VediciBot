@@ -17,7 +17,7 @@ async function execute(member){
         },
     };
 
-    const channel = member.guild.channels.cache.find(ch => ch.name === 'public');
+    const channel = member.guild.channels.cache.find(ch => ch.name === 'arrival');
     
     if (channel)
     channel.send({ embed: embedMessage });
