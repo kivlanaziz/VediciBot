@@ -1,14 +1,26 @@
-const Discord = require('discord.js');
-var util = require("../utility/canvasutil");
-
 async function execute(member){
-    const canvas = await util.generateWelcomeCanvas(member);
-    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
+    const embedMessage = {
+        color: 0x00ffa6,
+        author: {
+            name: "Hi " + member.user.username,
+            icon_url: member.user.displayAvatarURL()
+        },
+        fields: [
+            {
+                name: "Joined: " + member.joinedAt,
+                value: "Profile: <@" + member.id + ">"
+            }
+        ],
+        timestamp: new Date(),
+        footer: {
+            text: 'User Joined',
+        },
+    };
 
     const channel = member.guild.channels.cache.find(ch => ch.name === 'public');
     
     if (channel)
-    channel.send(`Hi ${member} 😃`, attachment);
+    channel.send({ embed: embedMessage });
     
 }
 
