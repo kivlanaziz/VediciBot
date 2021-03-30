@@ -1,19 +1,19 @@
 async function execute(member){
     const embedMessage = {
-        color: 0x00ffa6,
+        color: 0xff4d00,
         author: {
-            name: "Hi " + member.user.username,
+            name: "See you again " + member.user.username + "!",
             icon_url: member.user.displayAvatarURL()
         },
         fields: [
             {
-                name: "Joined: " + member.joinedAt,
+                name: "Left: " + new Date(),
                 value: "Profile: <@" + member.id + ">"
             }
         ],
         timestamp: new Date(),
         footer: {
-            text: 'User Joined',
+            text: 'User Left',
         },
     };
 
@@ -25,7 +25,7 @@ async function execute(member){
 }
 
 module.exports={
-    name: "welcomemessage",
-    description: "Send Welcome Message to the specified member",
+    name: "leavemessage",
+    description: "Send Exit Message to the specified member",
     execute: execute,
 };

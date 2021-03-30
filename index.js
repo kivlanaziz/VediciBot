@@ -66,6 +66,17 @@ client.on('guildMemberAdd', member => {
     }
 });
 
+client.on('guildMemberRemove', member => {
+    var command = client.commands.get("leavemessage");
+    if (!command) return;
+
+    try{
+        command.execute(member);
+    } catch(err){
+        console.error(err);
+    }
+});
+
 client.on("messageReactionAdd", async(reaction,user)=>{
     const command = client.commands.get("assignrole");
     if (!command) return;
