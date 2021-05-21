@@ -34,7 +34,7 @@ function execute(message) {
         const collector = sentEmbed.createReactionCollector(
             (reaction,user) =>
             ["⏸️", "▶️","⏭️"].includes(reaction.emoji.name) && !user.bot, 
-            { time: 60000 });
+            { time: 600000 });
 
         collector.on('collect', reaction => {
             if (reaction.emoji.name === "⏸️"){
@@ -56,6 +56,12 @@ function execute(message) {
                 .addFields({name:newSong.title,value:newSong.url}))
             }
         })
+
+        collector.on('end', () => {
+            if (!sentEmbed.deleted) {
+                sentEmbed.reactions.removeAll()
+            }
+        });
     })
 }
 
