@@ -171,7 +171,6 @@ async function play(guild, song, queue) {
         });
 
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-    serverQueue.textChannel.send(`Start playing: **${song.title}**`);
 }
 
 module.exports={
