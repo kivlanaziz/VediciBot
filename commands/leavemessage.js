@@ -12,7 +12,7 @@ async function execute(member){
                 value: "Profile: <@" + member.id + ">"
             }
         ],
-        timestamp: new Date(),
+        timestamp: new Date(date.toLocaleString('en-US', { timeZone: "UTC" })),
         footer: {
             text: 'User Left',
         },
