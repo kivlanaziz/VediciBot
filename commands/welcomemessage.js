@@ -1,5 +1,5 @@
 async function execute(member){
-    const channelName = '🛂｜arrival'
+    const channelID = '826063132710666302'
     const embedMessage = {
         color: 0x00ffa6,
         author: {
@@ -18,12 +18,12 @@ async function execute(member){
         },
     };
 
-    const channel = member.guild.channels.cache.find(ch => ch.name === channelName);
+    const channel = member.guild.channels.cache.get(channelID);
     
     if (channel)
     channel.send({ embed: embedMessage });
     else
-    console.warn("Cannot Find Channel " + channelName);
+    console.warn("Cannot Find Channel with ID " + channelID);
 }
 
 module.exports={
