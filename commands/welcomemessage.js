@@ -1,5 +1,6 @@
 async function execute(member){
     const channelID = '826063132710666302'
+    let date = new Date(Date.UTC(year, month, day, hour, minute, second))
     const embedMessage = {
         color: 0x00ffa6,
         author: {
