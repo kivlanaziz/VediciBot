@@ -1,4 +1,4 @@
-async function execute(member){
+async function execute(member) {
     const channelID = '826063132710666302'
     const embedMessage = {
         color: 0x00ffa6,
@@ -6,12 +6,10 @@ async function execute(member){
             name: "Hi " + member.user.username,
             icon_url: member.user.displayAvatarURL()
         },
-        fields: [
-            {
-                name: "Joined: " + member.joinedAt,
-                value: "Profile: <@" + member.id + ">"
-            }
-        ],
+        fields: [{
+            name: "Joined: " + member.joinedAt,
+            value: "Profile: <@" + member.id + ">"
+        }],
         timestamp: new Date(),
         footer: {
             text: 'User Joined',
@@ -19,14 +17,16 @@ async function execute(member){
     };
 
     const channel = member.guild.channels.cache.get(channelID);
-    
+
     if (channel)
-    channel.send({ embed: embedMessage });
+        channel.send({
+            embed: embedMessage
+        });
     else
-    console.warn("Cannot Find Channel with ID " + channelID);
+        console.warn("Cannot Find Channel with ID " + channelID);
 }
 
-module.exports={
+module.exports = {
     name: "welcomemessage",
     description: "Send Welcome Message to the specified member",
     execute: execute,

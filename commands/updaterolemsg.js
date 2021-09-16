@@ -1,25 +1,26 @@
 var util = require("../utility/roleutil");
 
-function execute(message){
-    if (message.member.hasPermission("ADMINISTRATOR")){
+function execute(message) {
+    if (message.member.hasPermission("ADMINISTRATOR")) {
         var body = util.generateBody();
 
         message.channel.messages.fetch(util.configuration.RoleMessageID).then((message) => {
-            message.edit({ embed: body.embedList });
+            message.edit({
+                embed: body.embedList
+            });
             message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
-            for (let i=0; i<body.emojiList.length; i++){
+            for (let i = 0; i < body.emojiList.length; i++) {
                 message.react(body.emojiList[i]);
             }
-        }).catch(error =>{
+        }).catch(error => {
             console.log(error);
         });
-    }
-    else{
+    } else {
         message.reply("You are not Administrator!");
     }
 }
 
-module.exports={
+module.exports = {
     name: "updateroles",
     description: "Update existing role message",
     execute: execute,

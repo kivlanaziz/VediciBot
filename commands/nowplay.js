@@ -1,14 +1,16 @@
-const { MessageEmbed } = require('discord.js');
+const {
+    MessageEmbed
+} = require('discord.js');
 
-function pause(serverQueue){
+function pause(serverQueue) {
     serverQueue.connection.dispatcher.pause(true);
 }
 
-function resume(serverQueue){
+function resume(serverQueue) {
     serverQueue.connection.dispatcher.resume();
 }
 
-function skip(serverQueue){
+function skip(serverQueue) {
     serverQueue.connection.dispatcher.end();
 }
 
@@ -24,7 +26,10 @@ function execute(message) {
         .setColor('0x8dbbcc')
         .setTitle('Vedici Live Music Queue')
         .setDescription('Now Playing')
-        .addFields({name:song.title,value:song.url});
+        .addFields({
+            name: song.title,
+            value: song.url
+        });
 
     message.channel.send(embed).then(sentEmbed => {
         sentEmbed.react("⏸️");
@@ -32,28 +37,29 @@ function execute(message) {
         sentEmbed.react("⏭️");
 
         const collector = sentEmbed.createReactionCollector(
-            (reaction,user) =>
-            ["⏸️", "▶️","⏭️"].includes(reaction.emoji.name) && !user.bot, 
-            { time: 600000 });
+            (reaction, user) => ["⏸️", "▶️", "⏭️"].includes(reaction.emoji.name) && !user.bot, {
+                time: 600000
+            });
 
         collector.on('collect', reaction => {
-            if (reaction.emoji.name === "⏸️"){
+            if (reaction.emoji.name === "⏸️") {
                 pause(serverQueue);
-            }
-            else if(reaction.emoji.name === "▶️"){
+            } else if (reaction.emoji.name === "▶️") {
                 resume(serverQueue);
-            }
-            else if(reaction.emoji.name === "⏭️"){
+            } else if (reaction.emoji.name === "⏭️") {
                 skip(serverQueue);
 
                 const newServerQueue = message.client.queue.get(message.guild.id);
                 const newSong = newServerQueue.songs[0];
 
                 sentEmbed.edit(new MessageEmbed()
-                .setColor('0x8dbbcc')
-                .setTitle('Vedici Live Music Queue')
-                .setDescription('Now Playing')
-                .addFields({name:newSong.title,value:newSong.url}))
+                    .setColor('0x8dbbcc')
+                    .setTitle('Vedici Live Music Queue')
+                    .setDescription('Now Playing')
+                    .addFields({
+                        name: newSong.title,
+                        value: newSong.url
+                    }))
             }
         })
 
@@ -65,7 +71,7 @@ function execute(message) {
     })
 }
 
-module.exports={
+module.exports = {
     name: "nowplay",
     aliases: ['np'],
     description: "Display the currently played song info",

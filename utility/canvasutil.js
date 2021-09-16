@@ -11,13 +11,13 @@ const applyText = (canvas, text) => {
 	return ctx.font;
 };
 
-async function generateWelcomeCanvas(member){
-    const canvas = Canvas.createCanvas(700, 250);
+async function generateWelcomeCanvas(member) {
+	const canvas = Canvas.createCanvas(700, 250);
 	const ctx = canvas.getContext('2d');
 
 	// Since the image takes time to load, you should await it
 	const background = await Canvas.loadImage('./assets/images/welcome-background.jpg');
-    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+	ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
 	ctx.strokeStyle = '#000530';
 	ctx.strokeRect(0, 0, canvas.width, canvas.height);
@@ -35,12 +35,14 @@ async function generateWelcomeCanvas(member){
 	ctx.closePath();
 	ctx.clip();
 
-    const avatar = await Canvas.loadImage(member.user.displayAvatarURL({ format: 'jpg' }));
+	const avatar = await Canvas.loadImage(member.user.displayAvatarURL({
+		format: 'jpg'
+	}));
 	ctx.drawImage(avatar, 25, 25, 200, 200);
 
-    return canvas;
+	return canvas;
 }
 
 module.exports = {
-    generateWelcomeCanvas: generateWelcomeCanvas,
+	generateWelcomeCanvas: generateWelcomeCanvas,
 }

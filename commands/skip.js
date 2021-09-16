@@ -7,22 +7,20 @@ function execute(message) {
         );
     if (!serverQueue)
         return message.channel.send("There is no song that I could skip!");
-    
-    if (typeof args[1] === 'undefined'){
+
+    if (typeof args[1] === 'undefined') {
         serverQueue.connection.dispatcher.end();
-    }
-    else{
-        if (serverQueue.songs[args[1] - 1] !== 'undefined'){
-            serverQueue.songs.splice(args[1] - 1,1);
+    } else {
+        if (serverQueue.songs[args[1] - 1] !== 'undefined') {
+            serverQueue.songs.splice(args[1] - 1, 1);
             return message.channel.send("Song at index: " + args[1] + " is deleted from queue!");
-        }
-        else{
+        } else {
             return message.channel.send("There is no queued song at index " + args[1]);
         }
     }
 }
 
-module.exports={
+module.exports = {
     name: "skip",
     description: "skip the specified song",
     execute: execute

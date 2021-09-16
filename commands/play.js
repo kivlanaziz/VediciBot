@@ -29,12 +29,12 @@ async function execute(message) {
     var song;
     var isPlaylist = false;
 
-    if (validUrl.isUri(args[1])){
-        if (args[1].includes('/playlist?')){
+    if (validUrl.isUri(args[1])) {
+        if (args[1].includes('/playlist?')) {
             isPlaylist = true;
-            url = args[1].split('?',2);
-            var urlSearchParam = new URLSearchParams('?'+url[1]);
-            console.log('urlSearchParam: '+'?'+url[1]);
+            url = args[1].split('?', 2);
+            var urlSearchParam = new URLSearchParams('?' + url[1]);
+            console.log('urlSearchParam: ' + '?' + url[1]);
             var playlistId = urlSearchParam.get('list');
             var searchResult = await util.getYoutubePlaylist(playlistId);
             console.log(searchResult);
@@ -46,8 +46,7 @@ async function execute(message) {
                 }
                 songs.push(song);
             });
-        }
-        else{
+        } else {
             var youtubeUrl = args[1];
             songInfo = await ytdl.getInfo(youtubeUrl);
             song = {
@@ -56,32 +55,29 @@ async function execute(message) {
             };
             //return message.channel.send("Sorry, feature play by url is temporarily disabled!");
         }
-    }
-    else{
+    } else {
         var i;
         var queryString = "";
-        for (i = 1; i < args.length; i++ ){
+        for (i = 1; i < args.length; i++) {
             queryString += args[i] + " ";
         }
-        try{
+        try {
             var searchResult = await util.getYoutubeSearch(queryString);
-            
+
             var videoId = searchResult.data.items[0].id.videoId;
-            if (typeof videoId === 'undefined'){
+            if (typeof videoId === 'undefined') {
                 return message.channel.send(
                     "Cannot find the video"
                 );
-            }
-            else{
-                var youtubeUrl = 'https://www.youtube.com/watch?v='+videoId;
+            } else {
+                var youtubeUrl = 'https://www.youtube.com/watch?v=' + videoId;
                 songInfo = await ytdl.getInfo(youtubeUrl);
                 song = {
                     title: songInfo.videoDetails.title,
                     url: songInfo.videoDetails.video_url,
                 };
             }
-        }
-        catch(err){
+        } catch (err) {
             console.log(err);
         }
     }
@@ -99,11 +95,10 @@ async function execute(message) {
         // Setting the queue using our contract
         message.client.queue.set(message.guild.id, queueConstruct);
         // Pushing the song to our songs array
-        if (isPlaylist){
+        if (isPlaylist) {
             queueConstruct.songs.push(...songs);
             message.channel.send(`Playlist has been added to the queue!`);
-        }
-        else{
+        } else {
             queueConstruct.songs.push(song);
         }
 
@@ -120,17 +115,16 @@ async function execute(message) {
             return message.channel.send(err);
         }
     } else {
-        if (isPlaylist){
+        if (isPlaylist) {
             serverQueue.songs.push(...songs);
             console.log(serverQueue.songs);
             return message.channel.send(`Playlist has been added to the queue!`);
-        }
-        else{
+        } else {
             serverQueue.songs.push(song);
             console.log(serverQueue.songs);
             return message.channel.send(`${song.title} has been added to the queue!`);
         }
-        
+
     }
 }
 
@@ -144,18 +138,20 @@ async function play(guild, song, queue) {
 
     let stream = null;
 
-    try{
-        stream = await ytdl(song.url, { highWaterMark: 1 << 25 });
-    }catch(error){
+    try {
+        stream = await ytdl(song.url, {
+            highWaterMark: 1 << 25
+        });
+    } catch (error) {
         serverQueue.textChannel.send(`Sorry we are unable to play: **${song.title}**, skipping to the next song!`);
-        if (serverQueue){
+        if (serverQueue) {
             serverQueue.songs.shift();
             play(guild, serverQueue.songs[0], queue);
-        }    
+        }
     }
 
     const dispatcher = serverQueue.connection
-        .play(stream,{
+        .play(stream, {
             type: 'opus'
         })
         .on("finish", () => {
@@ -173,7 +169,7 @@ async function play(guild, song, queue) {
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
 
-module.exports={
+module.exports = {
     name: "play",
     aliases: ["p"],
     description: "Play Music",

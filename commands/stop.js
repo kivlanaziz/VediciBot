@@ -8,7 +8,7 @@ function execute(message) {
     serverQueue.connection.dispatcher.end();
 }
 
-module.exports={
+module.exports = {
     name: "stop",
     description: "Stop the music",
     execute: execute

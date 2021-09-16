@@ -1,40 +1,40 @@
 var roleData = require("../data/roles.json");
 var configuration = require("../data/configuration.json");
 
-function getEmojiRole(emoji){
-    for (let i=0; i < roleData.games.length; i++){
-        if (roleData.games[i].emoji == emoji){
+function getEmojiRole(emoji) {
+    for (let i = 0; i < roleData.games.length; i++) {
+        if (roleData.games[i].emoji == emoji) {
             return roleData.games[i].name;
         }
     }
 
-    for (let i=0; i < roleData.movies.length; i++){
-        if (roleData.movies[i].emoji == emoji){
+    for (let i = 0; i < roleData.movies.length; i++) {
+        if (roleData.movies[i].emoji == emoji) {
             return roleData.movies[i].name;
         }
     }
 
-    for (let i=0; i < roleData.musics.length; i++){
-        if (roleData.musics[i].emoji == emoji){
+    for (let i = 0; i < roleData.musics.length; i++) {
+        if (roleData.musics[i].emoji == emoji) {
             return roleData.musics[i].name;
         }
     }
 }
 
-function getRoleData(){
-    if (roleData){
+function getRoleData() {
+    if (roleData) {
         return roleData
     }
 
     return null;
 }
 
-function generateBody(){
+function generateBody() {
     var rolesMessage = [];
     var emojiList = [];
-    
+
     var OptionList = ""
-    for (let i=0; i < roleData.games.length; i++){
+    for (let i = 0; i < roleData.games.length; i++) {
         OptionList += roleData.games[i].emoji + "-" + roleData.games[i].name + "\n";
         emojiList.push(roleData.games[i].emoji);
     }
@@ -44,7 +44,7 @@ function generateBody(){
     });
 
     OptionList = ""
-    for (let i=0; i < roleData.movies.length; i++){
+    for (let i = 0; i < roleData.movies.length; i++) {
         OptionList += roleData.movies[i].emoji + "-" + roleData.movies[i].name + "\n";
         emojiList.push(roleData.movies[i].emoji);
     }
@@ -54,7 +54,7 @@ function generateBody(){
     });
 
     OptionList = ""
-    for (let i=0; i < roleData.musics.length; i++){
+    for (let i = 0; i < roleData.musics.length; i++) {
         OptionList += roleData.musics[i].emoji + "-" + roleData.musics[i].name + "\n";
         emojiList.push(roleData.musics[i].emoji);
     }

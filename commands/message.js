@@ -1,4 +1,4 @@
-function execute (message, PREFIX){
+function execute(message, PREFIX) {
     var helpMessage = [];
     //Play message
     helpMessage.push({
@@ -49,10 +49,12 @@ function execute (message, PREFIX){
         },
     };
     console.log(embedList);
-    return message.channel.send({ embed: embedList });
+    return message.channel.send({
+        embed: embedList
+    });
 }
 
-module.exports={
+module.exports = {
     name: "help",
     description: "Display Command List",
     execute: execute
