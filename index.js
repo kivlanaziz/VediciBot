@@ -17,9 +17,29 @@ const PREFIX = '-';
 
 client.queue = new Map();
 
-client.on('ready', () => {
+const getApp = (guildId) => {
+    const app = client.api.applications(client.user.id)
+    if (guildId){
+        app.guilds(guildId)
+    }
+    return app
+}
+
+client.on('ready', async () => {
     console.log('VediciBot Reporting!');
     client.user.setActivity('-help')
+
+    for (const command of client.commands){
+        await getApp(process.env.guildId).commands.post({
+            data: {
+                name: command[1].name,
+                description: command[1].description
+            },
+        })
+    }
+
+    const commands = await getApp(process.env.GuildId).commands.get()
+    console.log(commands)
 });
 
 client.on('message', (message) => {
